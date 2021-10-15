@@ -1,0 +1,35 @@
+{
+  "name": "plugin-master/console",
+  "description": "Command line application for PluginMaster",
+  "license": "MIT",
+  "homepage": "https://github.com/WP-Plugin-Master/console",
+  "support": {
+    "issues": "https://github.com/WP-Plugin-Master/console/issues",
+    "source": "https://github.com/WP-Plugin-Master/console"
+  },
+  "authors": [
+    {
+      "name": "AL EMRAN",
+      "email": "emrancu1@gmail.com"
+    }
+  ],
+  "keywords": [
+    "Console application",
+    "CLI Interface for PluginMaster",
+    "WordPress Plugin Development framework"
+  ],
+  "autoload": {
+    "classmap": [],
+    "psr-4": {
+      "PluginMaster\\Console\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.0|^8.0",
+    "symfony/console": "^5.3"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+
+  }
+
