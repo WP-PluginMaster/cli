@@ -1,5 +1,5 @@
 {
-  "name": "plugin-master/console",
+  "name": "plugin-master/cli",
   "description": "Command line application for PluginMaster",
   "license": "MIT",
   "homepage": "https://github.com/WP-Plugin-Master/console",
