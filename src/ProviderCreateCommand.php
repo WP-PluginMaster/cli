@@ -16,25 +16,25 @@ class ProviderCreateCommand extends Command
      * application root path
      * @var string
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * application controller path
-     * @var
+     * @var string
      */
-    private $providerPath;
+    private string $providerPath;
 
 
     /**
      * app namespace from composer.json
      * @var string
      */
-    private $appNamespace;
+    private string $appNamespace;
 
     /**
      * @var string
      */
-    private $providerName;
+    private string $providerName;
 
     public function __construct($path)
     {
@@ -44,7 +44,10 @@ class ProviderCreateCommand extends Command
         $this->setNamespace();
     }
 
-    protected function setNamespace()
+    /**
+     * set Namespace for app directory from composer.json file
+     */
+    protected function setNamespace(): void
     {
         $composer = file_get_contents($this->rootPath.DIRECTORY_SEPARATOR.'composer.json');
 
@@ -58,7 +61,10 @@ class ProviderCreateCommand extends Command
 
     }
 
-    protected function configure()
+    /**
+     * config for command
+     */
+    protected function configure(): void
     {
         $this->setName('make:provider')
             ->setDescription('Create provider!')
@@ -73,6 +79,12 @@ class ProviderCreateCommand extends Command
             );
     }
 
+    /**
+     * execute command
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->providerName = str_replace('/', '\\', trim($input->getArgument('providerName')));
@@ -117,13 +129,12 @@ class ProviderCreateCommand extends Command
         }
     }
 
-    protected function getControllerContent()
+    protected function getControllerContent(): string
     {
         $array              = explode('\\', $this->providerName);
         $className          = end($array);
         $namespaceFromInput = rtrim(str_replace($className, '', $this->providerName), "\\");
         $rightNamespace     = ($namespaceFromInput ? '\\'.$namespaceFromInput : '');
-
 
         $data = "<?php
 
@@ -141,7 +152,6 @@ class {$className} implements ServiceProviderInterface
 
 }
 ";
-
         return $data;
     }
 

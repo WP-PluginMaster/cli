@@ -15,15 +15,17 @@ class ControllerCreateCommand extends Command
      * supported command options
      * @var array
      */
-    private $supportedOptions = ['api', 'action', 'shortcode', 'sideMenu'];
+    private array $supportedOptions = ['api', 'action', 'shortcode', 'sideMenu'];
 
 
     /**
      * supported command option value
      * @var string[]
      */
-    private $optionValue = [
-        'api'      => 'Api', 'action' => 'Actions', 'shortcode' => 'Shortcodes',
+    private array $optionValue = [
+        'api'      => 'Api',
+        'action' => 'Actions',
+        'shortcode' => 'Shortcodes',
         'sideMenu' => 'SideMenu'
     ];
 
@@ -31,40 +33,40 @@ class ControllerCreateCommand extends Command
      * application root path
      * @var string
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * application controller path
      * @var
      */
-    private $controllerPath;
+    private string $controllerPath;
 
 
     /**
      * app namespace from composer.json
      * @var string
      */
-    private $appNamespace;
+    private string $appNamespace;
 
 
     /**
      * bootstrap namespace from composer.json
      * @var string
      */
-    private $bootstrapNamespace;
+    private string $bootstrapNamespace;
 
-
-    /**
-     * @var
-     */
-    private $controllerType;
 
     /**
      * @var string
      */
-    private $controllerName;
+    private string $controllerType;
 
-    public function __construct($path)
+    /**
+     * @var string
+     */
+    private string $controllerName;
+
+    public function __construct(string $path)
     {
         parent::__construct();
         $this->rootPath       = $path;
@@ -72,7 +74,10 @@ class ControllerCreateCommand extends Command
         $this->setNamespace();
     }
 
-    protected function setNamespace()
+    /**
+     * set Namespace for app directory from composer.json file
+     */
+    protected function setNamespace(): void
     {
         $composer = file_get_contents($this->rootPath.DIRECTORY_SEPARATOR.'composer.json');
 
@@ -87,9 +92,11 @@ class ControllerCreateCommand extends Command
                 $this->bootstrapNamespace = $key;
             }
         }
-
     }
 
+    /**
+     * config for command
+     */
     protected function configure()
     {
         $this->setName('make:controller')
@@ -102,9 +109,15 @@ class ControllerCreateCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'add controller type. like --type=api|shortcode|action|sidemenu',
                 ''
-            );
+       );
     }
 
+    /**
+     * execute command
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $option               = trim($input->getOption('type'));
@@ -119,17 +132,14 @@ class ControllerCreateCommand extends Command
                     $this->controllerName).'</>');
 
         } catch (Exception $e) {
-
             $output->writeln('<fg=red>Error: '.$e->getMessage().'</>');
         }
 
-
-        return 1;
+        return true;
     }
 
     protected function createController(): void
     {
-
         $filePath = str_replace('/', '\\',
                 ($this->controllerType ? $this->controllerType.DIRECTORY_SEPARATOR : '').$this->controllerName).'.php';
 
@@ -155,7 +165,7 @@ class ControllerCreateCommand extends Command
         }
     }
 
-    protected function getControllerContent($type)
+    protected function getControllerContent($type): string
     {
         $array              = explode('\\', $this->controllerName);
         $className          = end($array);
@@ -176,7 +186,6 @@ class {$className} extends Controller
   
 }
 ";
-
         return $data;
     }
 

@@ -8,8 +8,7 @@ use Symfony\Component\Console\Application;
 
 class ConsoleApplication
 {
-
-    public static function run($path)
+    public static function run(string $path): void
     {
         $app = new Application();
         $app->add(new ControllerCreateCommand($path));
@@ -22,6 +21,4 @@ class ConsoleApplication
             echo "Something went wrong";
         }
     }
-
-
 }

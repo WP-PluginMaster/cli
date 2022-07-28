@@ -16,27 +16,27 @@ class MiddlewareCreateCommand extends Command
      * application root path
      * @var string
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * application controller path
      * @var
      */
-    private $middlewarePath;
+    private string $middlewarePath;
 
 
     /**
      * app namespace from composer.json
      * @var string
      */
-    private $appNamespace;
+    private string $appNamespace;
 
     /**
      * @var string
      */
-    private $middlewareName;
+    private string $middlewareName;
 
-    public function __construct($path)
+    public function __construct(string $path)
     {
         parent::__construct();
         $this->rootPath       = $path;
@@ -44,7 +44,10 @@ class MiddlewareCreateCommand extends Command
         $this->setNamespace();
     }
 
-    protected function setNamespace()
+    /**
+     * set Namespace for app directory from composer.json file
+     */
+    protected function setNamespace(): void
     {
         $composer = file_get_contents($this->rootPath.DIRECTORY_SEPARATOR.'composer.json');
 
@@ -55,10 +58,12 @@ class MiddlewareCreateCommand extends Command
                 $this->appNamespace = $key;
             }
         }
-
     }
 
-    protected function configure()
+    /**
+     * config for command
+     */
+    protected function configure(): void
     {
         $this->setName('make:middleware')
             ->setDescription('Create middleware!')
@@ -73,6 +78,12 @@ class MiddlewareCreateCommand extends Command
             );
     }
 
+    /**
+     * execute command
+     * @param  InputInterface  $input
+     * @param  OutputInterface  $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->middlewareName = str_replace('/', '\\', trim($input->getArgument('middlewareName')));
@@ -92,7 +103,6 @@ class MiddlewareCreateCommand extends Command
 
     protected function createController(): void
     {
-
         $filePath = str_replace('/', '\\', $this->middlewareName).'.php';
 
         $pathTree = $this->middlewarePath;
@@ -117,7 +127,7 @@ class MiddlewareCreateCommand extends Command
         }
     }
 
-    protected function getControllerContent()
+    protected function getControllerContent(): string
     {
         $array              = explode('\\', $this->middlewareName);
         $className          = end($array);
@@ -142,7 +152,6 @@ class {$className} implements MiddlewareInterface
 
 }
 ";
-
         return $data;
     }
 
